@@ -3,7 +3,6 @@ const http = require('http');
 var options = {
     hostname: 'httpbin.org',
     port: 80,
-    path: '/', 
     headers: {
         'Content-Type': 'charset=utf-8'
     }
@@ -20,11 +19,11 @@ get(options, '/ip', function(res){
 });
 
 post(options, '/post', function(res){
-    res.setEncoding('utf8');
     res.on('data', function (chunk) {
-        console.log(chunk.toString('utf-8'));
+        console.log(JSON.parse(chunk.toString('utf-8')));
     });
-},{
+},
+{ // post할 객체
     foo: 'bar'
 });
 
@@ -47,7 +46,7 @@ function post(options, path='/', callback, data){
         res.setEncoding('utf-8');
         callback(res);
     });
-    
+
     req.write(JSON.stringify(data));
     req.end();
 }
